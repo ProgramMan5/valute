@@ -17,9 +17,7 @@ class ApiClient extends ChangeNotifier {
 
     final currency = RequestData.fromJson(json);
     print('ApiClient');
-    notifyListeners();
     return currency;
-
   }
 }
 

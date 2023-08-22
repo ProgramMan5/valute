@@ -1,48 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:valute/data/load_currency_data.dart';
+import 'package:valute/data/user_currency_data.dart';
 import 'package:valute/domain/api_client/api_client.dart';
 import 'package:valute/ui/screens/currency_list/currency_list.dart';
 import 'package:valute/ui/screens/currency_list/currency_list_model.dart';
 import 'package:valute/ui/screens/exchange_rates/exchange_rates.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:valute/ui/screens/exchange_rates/exchange_rates_model.dart';
+import 'package:valute/ui/theme/colors.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  final UserCurrencyData userCurrencyData = UserCurrencyData();
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-final currencyListModel = CurrencyListModel();
+  MyApp({Key? key}) : super(key: key);
 
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ApiClient()),
-        ChangeNotifierProvider.value(value: currencyListModel),
-      ],
-      child: ResponsiveApp(
-        builder: (context) => MaterialApp(
-          routes: {
-            '/exchange_rates': (context) => const ExchangeRates(),
-            '/currency_list': (context) => const CurrencyList(),
-          },
-          initialRoute: '/currency_list',
+        ChangeNotifierProvider(
+          create: (context) => LoadCurrencyData(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ApiClient(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ExchangeRatesModel(userCurrencyData),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ColorsTheme(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CurrencyListModel(
+            userCurrencyData,
+            Provider.of<ExchangeRatesModel>(context, listen: false),
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        routes: {
+          '/exchange_rates': (context) => const ExchangeRates(),
+          '/currency_list': (context) => const CurrencyList(),
+        },
+        initialRoute: '/exchange_rates',
       ),
     );
   }
-
-  @override
-  void initState() {
-    super.initState();
-    currencyListModel.loadCurrencies();
-  }
 }
-
