@@ -2,53 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:valute/data/user_currency_data.dart';
 import 'package:valute/domain/currency_data/currency_data.dart';
 
-
 class ExchangeRatesModel extends ChangeNotifier {
-  final UserCurrencyData _userCurrencyData;
-
   ExchangeRatesModel(this._userCurrencyData) {
-    loadValue();
+    loadValue(); //вызывает апи запрос
+    print('apiCallGetInRatesNodel');
   }
+
+  final UserCurrencyData _userCurrencyData; //экземпляр модели
 
   Future<List<CurrencyData>> loadValue() async {
     await _userCurrencyData.loadValue();
     notifyListeners();
     fillFirstValues();
     fillFSecondValues();
+    currenciesDividing();
     return _userCurrencyData.getCurrencies;
-  }
+  } // обращается к методу из модели который отправляет запрос
 
- void fillFirstValues(){
+  void fillFirstValues() {
     _firstNameCurrency = _userCurrencyData.firstCurrencyName;
     _firstCharCoreCurrency = _userCurrencyData.firstCurrencyCharCode;
     _firstRotes = _userCurrencyData.firstCurrencyValue;
- }
+  } //заполнение первого контейнера данными из модели
 
-  void fillFSecondValues(){
+  void fillFSecondValues() {
     _secondNameCurrency = _userCurrencyData.secondCurrencyName;
     _secondCharCoreCurrency = _userCurrencyData.secondCurrencyCharCode;
     _secondRotes = _userCurrencyData.secondCurrencyValue;
-  }
+  } //заполнение второго контейнера данными из модели
 
- String _firstNameCurrency = '';
+  String _firstNameCurrency = ''; // имя валюты первого контейнера
 
   String get firstNameCurrency => _firstNameCurrency;
 
-  String _firstCharCoreCurrency = '';
+  String _firstCharCoreCurrency = ''; // айди валюты первого контейнера
 
   String get firstCharCodeCurrency => _firstCharCoreCurrency;
 
-  String _secondNameCurrency = '';
+  String _secondNameCurrency = ''; // имя валюты второго контейнера
 
   String get secondNameCurrency => _secondNameCurrency;
 
-  String _secondCharCoreCurrency = '';
+  String _secondCharCoreCurrency = ''; // айди валюты второго контейнера
 
   String get secondCharCodeCurrency => _secondCharCoreCurrency;
 
-  firstWidgetFilling() => _userCurrencyData.firstFillWidget = true;
+  firstWidgetFilling() =>
+      _userCurrencyData.firstFillWidget = true; //заполняется первый контейнер
 
-  secondWidgetFilling() => _userCurrencyData.firstFillWidget = false;
+  secondWidgetFilling() =>
+      _userCurrencyData.firstFillWidget = false; //заполняется второй контейнер
 
   void fillCurrencyWidget() {
     if (_userCurrencyData.firstFillWidget) {
@@ -60,31 +63,32 @@ class ExchangeRatesModel extends ChangeNotifier {
       _secondCharCoreCurrency = _userCurrencyData.secondCurrencyCharCode;
       _secondRotes = _userCurrencyData.secondCurrencyValue;
     }
+    currenciesDividing();
     notifyListeners();
-  }
+  } // взять данные из модели и заполнить ими активный контейнер
 
-  String _firstFiledValue = '';
+  String _firstFiledValue = '1'; //цифры количества первой валюты
 
   String get firstFiledValue => _firstFiledValue;
 
-  String _secondFiledValue = '';
+  String _secondFiledValue = ''; //цифры количества второй валюты
 
   String get secondFiledValue => _secondFiledValue;
 
-  double _firstRotes = 0;
-  double _secondRotes = 0;
+  double _firstRotes = 0; // курс (к рублю) первой валюты
+  double _secondRotes = 0; // курс (к рублю) второй валюты
 
   bool _firstFieldActive = true;
 
   void makeFirstFieldActive() {
     _firstFieldActive = true;
     notifyListeners();
-  }
+  } // сделать поле ввода первого контейнера активным
 
   void makeSecondFieldActive() {
     _firstFieldActive = false;
     notifyListeners();
-  }
+  } // сделать поле ввода второго контейнера активным
 
   void currenciesDividing() {
     if (_firstFieldActive) {
@@ -111,17 +115,33 @@ class ExchangeRatesModel extends ChangeNotifier {
       }
     }
     notifyListeners();
-  }
+  } // функция подсчета курса
 
   void numPress(String enterNumber) {
     if (_firstFieldActive) {
-      _firstFiledValue += enterNumber;
+      if (enterNumber == '0' && _firstFiledValue == '0') {
+        return;
+      } else if (_firstFiledValue.length == 1 && _firstFiledValue[0] == '0') {
+        _firstFiledValue = '';
+      }
+      if (_firstFiledValue.length < 10) {
+        _firstFiledValue += enterNumber;
+      }
     } else {
-      _secondFiledValue += enterNumber;
+      if (enterNumber == '0' && _secondFiledValue == '0') {
+        return;
+      } else if (_secondFiledValue.length == 1 && _secondFiledValue[0] == '0') {
+        _secondFiledValue = '';
+      }
+      if (_secondFiledValue.length < 12) {
+        _secondFiledValue += enterNumber;
+      }
     }
     currenciesDividing();
     notifyListeners();
-  }
+  } // функция ввода текста
+
+  ///убрать повторение
 
   void delete() {
     if (_firstFieldActive) {
@@ -137,15 +157,20 @@ class ExchangeRatesModel extends ChangeNotifier {
         _secondFiledValue = '0';
       }
     }
+    currenciesDividing();
     notifyListeners();
-  }
+  } //функция деления
+
+  ///убрать повторение
 
   void totalDelete() {
     if (_firstFieldActive) {
-      _firstFiledValue = '';
+      _firstFiledValue = '0';
     } else {
-      _secondFiledValue = '';
+      _secondFiledValue = '0';
     }
+    currenciesDividing();
     notifyListeners();
   }
-}
+
+} // функция тотального деления

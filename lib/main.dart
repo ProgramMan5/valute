@@ -10,13 +10,13 @@ import 'package:valute/ui/screens/exchange_rates/exchange_rates_model.dart';
 import 'package:valute/ui/theme/colors.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(  MyApp());
 }
-
+///как то добавить конст
 class MyApp extends StatelessWidget {
   final UserCurrencyData userCurrencyData = UserCurrencyData();
 
-  MyApp({Key? key}) : super(key: key);
+   MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +29,14 @@ class MyApp extends StatelessWidget {
           create: (context) => ApiClient(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ExchangeRatesModel(userCurrencyData),
+          create: (context) => ExchangeRatesModel(UserCurrencyData()),
         ),
         ChangeNotifierProvider(
           create: (context) => ColorsTheme(),
         ),
         ChangeNotifierProvider(
           create: (context) => CurrencyListModel(
-            userCurrencyData,
+            UserCurrencyData(),
             Provider.of<ExchangeRatesModel>(context, listen: false),
           ),
         ),

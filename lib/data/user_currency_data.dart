@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:valute/domain/currency_data/currency_data.dart';
-import 'package:valute/ui/screens/exchange_rates/exchange_rates_model.dart';
 import 'load_currency_data.dart';
 
 class UserCurrencyData extends ChangeNotifier {
@@ -24,7 +23,8 @@ class UserCurrencyData extends ChangeNotifier {
     fillFirstValues();
     fillSecondValues();
     notifyListeners();
-  }
+    print('apiCalledInLoadCurrencyData');
+  } // отправляет апи запрос
 
   void fillFirstValues() {
     for (CurrencyData currency in getCurrencies) {
@@ -34,7 +34,9 @@ class UserCurrencyData extends ChangeNotifier {
         firstCurrencyValue = currency.value;
       }
     }
-  }
+    print('fillDataInLoadCurrency');
+  } //заполняет данные второй валюты по ее имени
+
   void fillSecondValues() {
     for (CurrencyData currency in getCurrencies) {
       if (currency.name.contains('Евро')) {
@@ -43,5 +45,5 @@ class UserCurrencyData extends ChangeNotifier {
         secondCurrencyValue = currency.value;
       }
     }
-  }
+  } //заполняет данные первой валюты по ее имени
 }
