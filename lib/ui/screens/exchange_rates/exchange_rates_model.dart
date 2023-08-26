@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:valute/data/user_currency_data.dart';
-import 'package:valute/domain/currency_data/currency_data.dart';
+import 'package:valute/data/user_currency_service.dart';
 
 class ExchangeRatesModel extends ChangeNotifier {
-  ExchangeRatesModel(this._userCurrencyData) {
-    loadValue(); //вызывает апи запрос
-    print('apiCallGetInRatesNodel');
+  ExchangeRatesModel(this._userCurrencyService) {
+    loadValue();
   }
 
-  final UserCurrencyData _userCurrencyData; //экземпляр модели
+  final UserCurrencyService _userCurrencyService;//экземпляр класса сервиса
 
-  Future<List<CurrencyData>> loadValue() async {
-    await _userCurrencyData.loadValue();
-    notifyListeners();
+  void loadValue() async {
+    await _userCurrencyService.loadCurrencies();
     fillFirstValues();
     fillFSecondValues();
     currenciesDividing();
-    return _userCurrencyData.getCurrencies;
+    notifyListeners();
   } // обращается к методу из модели который отправляет запрос
 
   void fillFirstValues() {
-    _firstNameCurrency = _userCurrencyData.firstCurrencyName;
-    _firstCharCoreCurrency = _userCurrencyData.firstCurrencyCharCode;
-    _firstRotes = _userCurrencyData.firstCurrencyValue;
+    _firstNameCurrency = _userCurrencyService.userData.firstCurrency.name;
+    _firstCharCoreCurrency =
+        _userCurrencyService.userData.firstCurrency.charCode;
+    _firstRotes = _userCurrencyService.userData.firstCurrency.value;
   } //заполнение первого контейнера данными из модели
 
   void fillFSecondValues() {
-    _secondNameCurrency = _userCurrencyData.secondCurrencyName;
-    _secondCharCoreCurrency = _userCurrencyData.secondCurrencyCharCode;
-    _secondRotes = _userCurrencyData.secondCurrencyValue;
+    _secondNameCurrency = _userCurrencyService.userData.secondCurrency.name;
+    _secondCharCoreCurrency =
+        _userCurrencyService.userData.secondCurrency.charCode;
+    _secondRotes = _userCurrencyService.userData.secondCurrency.value;
   } //заполнение второго контейнера данными из модели
 
   String _firstNameCurrency = ''; // имя валюты первого контейнера
@@ -47,21 +46,17 @@ class ExchangeRatesModel extends ChangeNotifier {
 
   String get secondCharCodeCurrency => _secondCharCoreCurrency;
 
-  firstWidgetFilling() =>
-      _userCurrencyData.firstFillWidget = true; //заполняется первый контейнер
+  firstWidgetFilling() => _userCurrencyService.firstWidgetFilling =
+      true; //заполняется первый контейнер
 
-  secondWidgetFilling() =>
-      _userCurrencyData.firstFillWidget = false; //заполняется второй контейнер
+  secondWidgetFilling() => _userCurrencyService.firstWidgetFilling =
+      false; //заполняется второй контейнер
 
   void fillCurrencyWidget() {
-    if (_userCurrencyData.firstFillWidget) {
-      _firstNameCurrency = _userCurrencyData.firstCurrencyName;
-      _firstCharCoreCurrency = _userCurrencyData.firstCurrencyCharCode;
-      _firstRotes = _userCurrencyData.firstCurrencyValue;
+    if (_userCurrencyService.firstWidgetFilling) {
+      fillFirstValues();
     } else {
-      _secondNameCurrency = _userCurrencyData.secondCurrencyName;
-      _secondCharCoreCurrency = _userCurrencyData.secondCurrencyCharCode;
-      _secondRotes = _userCurrencyData.secondCurrencyValue;
+      fillFSecondValues();
     }
     currenciesDividing();
     notifyListeners();
@@ -78,7 +73,7 @@ class ExchangeRatesModel extends ChangeNotifier {
   double _firstRotes = 0; // курс (к рублю) первой валюты
   double _secondRotes = 0; // курс (к рублю) второй валюты
 
-  bool _firstFieldActive = true;
+  bool _firstFieldActive = true; //активное поле ввода
 
   void makeFirstFieldActive() {
     _firstFieldActive = true;
@@ -92,76 +87,64 @@ class ExchangeRatesModel extends ChangeNotifier {
 
   void currenciesDividing() {
     if (_firstFieldActive) {
-      _secondFiledValue =
-          ((_firstRotes / _secondRotes) * double.parse(_firstFiledValue))
-              .toStringAsFixed(2)
-              .toString();
-      if (_secondFiledValue.substring(
-              _secondFiledValue.length - 3, _secondFiledValue.length) ==
-          '.00') {
-        _secondFiledValue =
-            _secondFiledValue.substring(0, _secondFiledValue.length - 3);
-      }
+      _secondFiledValue = calculateValue(
+          _firstRotes, _secondRotes, double.parse(_firstFiledValue));
     } else {
-      _firstFiledValue =
-          ((_secondRotes / _firstRotes) * double.parse(_secondFiledValue))
-              .toStringAsFixed(2)
-              .toString();
-      if (_firstFiledValue.substring(
-              _firstFiledValue.length - 3, _firstFiledValue.length) ==
-          '.00') {
-        _firstFiledValue =
-            _firstFiledValue.substring(0, _firstFiledValue.length - 3);
-      }
+      _firstFiledValue = calculateValue(
+          _secondRotes, _firstRotes, double.parse(_secondFiledValue));
     }
     notifyListeners();
-  } // функция подсчета курса
+  } //функция модсчета курса
+
+  String calculateValue(double rateOne, double rateTwo, double value) {
+    var result = ((rateOne / rateTwo) * value).toStringAsFixed(2).toString();
+    if (result.substring(result.length - 3, result.length) == '.00') {
+      result = result.substring(0, result.length - 3);
+    }
+    return result;
+  }
+
+  String _deterningActiveField() {
+    if (_firstFieldActive) {
+      return _firstFiledValue;
+    } else {
+      return _secondFiledValue;
+    }
+  }
+
+  void _returnValueInField(String text) {
+    if (_firstFieldActive) {
+      _firstFiledValue = text;
+    } else {
+      _secondFiledValue = text;
+    }
+  }
 
   void numPress(String enterNumber) {
-    if (_firstFieldActive) {
-      if (enterNumber == '0' && _firstFiledValue == '0') {
-        return;
-      } else if (_firstFiledValue.length == 1 && _firstFiledValue[0] == '0') {
-        _firstFiledValue = '';
-      }
-      if (_firstFiledValue.length < 10) {
-        _firstFiledValue += enterNumber;
-      }
-    } else {
-      if (enterNumber == '0' && _secondFiledValue == '0') {
-        return;
-      } else if (_secondFiledValue.length == 1 && _secondFiledValue[0] == '0') {
-        _secondFiledValue = '';
-      }
-      if (_secondFiledValue.length < 12) {
-        _secondFiledValue += enterNumber;
-      }
+    String text = _deterningActiveField();
+    if (enterNumber == '0' && text == '0') {
+      return;
+    } else if (text.length == 1 && text[0] == '0') {
+      text = '';
     }
+    if (text.length < 10) {
+      text += enterNumber;
+    }
+    _returnValueInField(text);
     currenciesDividing();
     notifyListeners();
-  } // функция ввода текста
-
-  ///убрать повторение
+  } //функция ввода цифр
 
   void delete() {
-    if (_firstFieldActive) {
-      _firstFiledValue =
-          _firstFiledValue.substring(0, _firstFiledValue.length - 1);
-      if (_firstFiledValue == '') {
-        _firstFiledValue = '0';
-      }
-    } else {
-      _secondFiledValue =
-          _secondFiledValue.substring(0, _secondFiledValue.length - 1);
-      if (_secondFiledValue == '') {
-        _secondFiledValue = '0';
-      }
+    String text = _deterningActiveField();
+    text = text.substring(0, text.length - 1);
+    if (text == '') {
+      text = '0';
     }
+    _returnValueInField(text);
     currenciesDividing();
     notifyListeners();
-  } //функция деления
-
-  ///убрать повторение
+  } //функция удаления
 
   void totalDelete() {
     if (_firstFieldActive) {
@@ -171,6 +154,5 @@ class ExchangeRatesModel extends ChangeNotifier {
     }
     currenciesDividing();
     notifyListeners();
-  }
-
-} // функция тотального деления
+  } // функция тотального удаления
+}

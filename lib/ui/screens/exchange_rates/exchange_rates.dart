@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valute/ui/screens/currency_list/currency_list.dart';
 import 'package:valute/ui/theme/colors.dart';
-
 import 'exchange_rates_model.dart';
 
 class ExchangeRates extends StatelessWidget {
@@ -209,8 +208,6 @@ class ExchangeRatesBody extends StatelessWidget {
   }
 }
 
-///ВЫНОСИТЬ ЦЕЛЫЙ КОНТЕЙНЕР НЕ СОВСЕМ ЦЕЛЕСООБРАЗНАЯ ИДЕЯ, НАВЕРНОЕ ЛУЧШЕ ВЫНОСИТЬ ЕГО СОСТОВЛЯЮЩИЕ
-
 class _RotesContainer extends StatelessWidget {
   final Color colorOfRatesWidget;
   final Color colorOfIconWidget;
@@ -221,13 +218,15 @@ class _RotesContainer extends StatelessWidget {
   final Function() choiceInputField;
 
   const _RotesContainer(
-      {required this.colorOfRatesWidget,
+      {Key? key,
+      required this.colorOfRatesWidget,
       required this.colorOfIconWidget,
       required this.charCodeCurrency,
       required this.valueField,
       required this.nameCurrency,
       required this.widgetFilling,
-      required this.choiceInputField});
+      required this.choiceInputField})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -346,14 +345,28 @@ class _Button extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: color.colorOfAppBar,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              padding: EdgeInsets.zero,
             ),
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 26),
+            child: Ink(
+              decoration: BoxDecoration(
+                gradient:  LinearGradient(
+                  begin: const Alignment(-2, 0),
+                  end: const Alignment(5, 0),
+                  colors: [color.colorOfSecondButtonColor, color.colorOfAppBar],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 50),
+                alignment: Alignment.center,
+                child: Text(
+                  text,
+                  style: const TextStyle(fontSize: 26),
+                ),
+              ),
             ),
           ),
         ),

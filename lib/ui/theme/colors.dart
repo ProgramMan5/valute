@@ -7,7 +7,7 @@ class ColorsTheme extends ChangeNotifier{
   Color colorOfBackground = const  Color(0xFF363E53);
   Color colorOfIconsAppBar = const Color(0xFFFFFFFF);
   Color colorOfRatesWidget = const Color(0xFFEDEDED);
-  // Color colorOfRatesWidget = const Color(0xFFC6C6C6);
   Color colorOfIconsWidget = const Color(0xFF414141);
-  AssetImage vectorVertical =   const AssetImage('images/vector_vertical.png');
+  Color colorOfSecondButtonColor = const Color(0xFF4B5C87);
+  AssetImage vectorVertical = const AssetImage('images/vector_vertical.png');
 }

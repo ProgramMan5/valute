@@ -20,4 +20,3 @@ class ApiClient extends ChangeNotifier {
     return currency;
   }
 }
-

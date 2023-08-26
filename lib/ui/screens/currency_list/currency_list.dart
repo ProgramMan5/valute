@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valute/ui/screens/exchange_rates/exchange_rates.dart';
+import 'package:valute/ui/screens/exchange_rates/exchange_rates_model.dart';
 import 'package:valute/ui/theme/colors.dart';
 import 'currency_list_model.dart';
 
@@ -11,6 +12,7 @@ class CurrencyList extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Provider.of<ColorsTheme>(context);
     final model = Provider.of<CurrencyListModel>(context);
+    final exchangeRatesModel = Provider.of<ExchangeRatesModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -69,6 +71,7 @@ class CurrencyList extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             model.fillCurrencyWidget(index);
+                            exchangeRatesModel.fillCurrencyWidget();
                             Navigator.pop(
                               context,
                               MaterialPageRoute(
