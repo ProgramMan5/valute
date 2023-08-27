@@ -42,6 +42,12 @@ class CurrencyListModel extends ChangeNotifier {
     notifyListeners();
   } //функция поиска
 
+  void outForBackButton() {
+    _searchController.text = '';
+    searchCurrency();
+    notifyListeners();
+  }
+
   void fillCurrencyWidget(int index) async {
     final currency = filteredCurrencies[index];
     _userCurrencyService.changeCurrency(currency.name);

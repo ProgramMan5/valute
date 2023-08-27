@@ -22,6 +22,7 @@ class CurrencyList extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
+                model.outForBackButton();
                 Navigator.pop(
                   context,
                   MaterialPageRoute(
@@ -83,7 +84,14 @@ class CurrencyList extends StatelessWidget {
                             height: 60,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: color.colorOfRatesWidget,
+                              gradient: LinearGradient(
+                                begin: const Alignment(-0.2, 3),
+                                end: const Alignment(2.6, 0),
+                                colors: <Color>[
+                                  color.colorOfRatesWidget,
+                                  color.lightBlue,
+                                ],
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(

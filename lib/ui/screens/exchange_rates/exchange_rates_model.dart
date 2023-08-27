@@ -77,12 +77,10 @@ class ExchangeRatesModel extends ChangeNotifier {
 
   void makeFirstFieldActive() {
     _firstFieldActive = true;
-    notifyListeners();
   } // сделать поле ввода первого контейнера активным
 
   void makeSecondFieldActive() {
     _firstFieldActive = false;
-    notifyListeners();
   } // сделать поле ввода второго контейнера активным
 
   void currenciesDividing() {

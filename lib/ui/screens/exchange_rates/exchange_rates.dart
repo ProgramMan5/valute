@@ -232,95 +232,101 @@ class _RotesContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Provider.of<ColorsTheme>(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2),
-      child: Container(
-        height: 90,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: colorOfRatesWidget,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  charCodeCurrency,
-                  style: const TextStyle(fontSize: 34),
+        padding: const EdgeInsets.symmetric(horizontal: 2),
+        child: Container(
+          height: 90,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: const Alignment(0, 0),
+              end: const Alignment(3.4, 3),
+              colors: <Color>[
+                color.colorOfRatesWidget,
+                color.lightBlue,
+              ],
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    charCodeCurrency,
+                    style: const TextStyle(fontSize: 34),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 38,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(width: 1.4),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                    child: TextButton(
-                      onPressed: choiceInputField,
-                      child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            valueField,
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                                color: color.colorOfTextBlack, fontSize: 20),
-                          )),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      nameCurrency,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CurrencyList(),
+                    Container(
+                      height: 38,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 1.4),
                       ),
-                    );
-                    widgetFilling();
-                  },
-                  splashRadius: 30,
-                  //не ставить 0
-                  icon: Icon(
-                    color: colorOfIconWidget,
-                    Icons.sync,
-                  ),
-                  iconSize: 38,
+                      child: TextButton(
+                        onPressed: choiceInputField,
+                        child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              valueField,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  color: color.colorOfTextBlack, fontSize: 20),
+                            )),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        nameCurrency,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+              Expanded(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CurrencyList(),
+                        ),
+                      );
+                      widgetFilling();
+                    },
+                    splashRadius: 30,
+                    //не ставить 0
+                    icon: Icon(
+                      color: colorOfIconWidget,
+                      Icons.sync,
+                    ),
+                    iconSize: 38,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }
 
@@ -352,10 +358,13 @@ class _Button extends StatelessWidget {
             ),
             child: Ink(
               decoration: BoxDecoration(
-                gradient:  LinearGradient(
+                gradient: LinearGradient(
                   begin: const Alignment(-2, 0),
                   end: const Alignment(5, 0),
-                  colors: [color.colorOfSecondButtonColor, color.colorOfAppBar],
+                  colors: [
+                    color.colorOfSecondButtonColor,
+                    color.colorOfAppBar,
+                  ],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),

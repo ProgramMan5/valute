@@ -12,7 +12,6 @@ class UserCurrencyService {
 
   UserData get userData => _userData;
 
-
   UserData _userData = UserData(
     RequestData(
       date: '',
@@ -41,7 +40,16 @@ class UserCurrencyService {
     ),
   );
   String firstCurrencyName = 'Доллар США';
-  String secondCurrencyName = 'Евро';
+  String secondCurrencyName = 'Российский рубль';
+
+  final CurrencyData _rubData = CurrencyData(
+      id: 'none',
+      numCode: 'none',
+      charCode: 'RUB',
+      nominal: 1,
+      name: 'Российский рубль',
+      value: 1,
+      previous: 1);
 
   void changeCurrency(String name) {
     if (firstWidgetFilling) {
@@ -57,6 +65,7 @@ class UserCurrencyService {
     final currenciesResponse = await _apiClient.getCarrencyData();
     _currencies.addAll(currenciesResponse.valute.values.toList());
     _userData = _userData.copyWith(requestData: currenciesResponse);
+    (_currencies.add(_rubData));
     List.from(_currencies);
     fillFirstCurrencyValues();
     fillSecondCurrencyValues();
