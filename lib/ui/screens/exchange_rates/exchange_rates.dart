@@ -11,6 +11,7 @@ class ExchangeRates extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Provider.of<ColorsTheme>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: color.colorOfAppBar,
@@ -26,7 +27,7 @@ class ExchangeRates extends StatelessWidget {
                 iconSize: 30,
               ),
               const Text(
-                'Конветер валют',
+                'Конвертер валют',
                 style: TextStyle(fontSize: 20),
               ),
               IconButton(
@@ -94,11 +95,11 @@ class ExchangeRatesBody extends StatelessWidget {
               height: 80,
             ),
             Expanded(
-              child: Column(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _Button(
@@ -109,28 +110,34 @@ class ExchangeRatesBody extends StatelessWidget {
                         ),
                         _Button(
                           onPressed: () {
-                            model.numPress('2');
+                            model.numPress('4');
                           },
-                          text: '2',
+                          text: '4',
                         ),
                         _Button(
                           onPressed: () {
-                            model.numPress('3');
+                            model.numPress('7');
                           },
-                          text: '3',
+                          text: '7',
+                        ),
+                        _Button(
+                          onPressed: () {
+                            model.numPress('00');
+                          },
+                          text: '00',
                         ),
                       ],
                     ),
                   ),
                   Expanded(
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _Button(
                           onPressed: () {
-                            model.numPress('4');
+                            model.numPress('2');
                           },
-                          text: '4',
+                          text: '2',
                         ),
                         _Button(
                           onPressed: () {
@@ -140,47 +147,9 @@ class ExchangeRatesBody extends StatelessWidget {
                         ),
                         _Button(
                           onPressed: () {
-                            model.numPress('6');
-                          },
-                          text: '6',
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _Button(
-                          onPressed: () {
-                            model.numPress('7');
-                          },
-                          text: '7',
-                        ),
-                        _Button(
-                          onPressed: () {
                             model.numPress('8');
                           },
                           text: '8',
-                        ),
-                        _Button(
-                          onPressed: () {
-                            model.numPress('9');
-                          },
-                          text: '9',
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _Button(
-                          onPressed: () {
-                            model.totalDelete();
-                          },
-                          text: 'C',
                         ),
                         _Button(
                           onPressed: () {
@@ -188,11 +157,55 @@ class ExchangeRatesBody extends StatelessWidget {
                           },
                           text: '0',
                         ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _Button(
+                          onPressed: () {
+                            model.numPress('3');
+                          },
+                          text: '3',
+                        ),
+                        _Button(
+                          onPressed: () {
+                            model.numPress('6');
+                          },
+                          text: '6',
+                        ),
+                        _Button(
+                          onPressed: () {
+                            model.numPress('9');
+                          },
+                          text: '9',
+                        ),
+                        _Button(
+                          onPressed: () {
+                            model.numPress('.');
+                          },
+                          text: '.',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         _Button(
                           onPressed: () {
                             model.delete();
                           },
                           text: '⌫',
+                        ),
+                        _Button(
+                          onPressed: () {
+                            model.totalDelete();
+                          },
+                          text: 'С',
                         ),
                         // '⌫',
                       ],
@@ -255,7 +268,7 @@ class _RotesContainer extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     charCodeCurrency,
-                    style: const TextStyle(fontSize: 34),
+                    style: const TextStyle(fontSize: 38),
                   ),
                 ),
               ),
@@ -264,7 +277,7 @@ class _RotesContainer extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(
-                      height: 10,
+                      height: 6,
                     ),
                     Container(
                       height: 38,
@@ -294,7 +307,7 @@ class _RotesContainer extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         nameCurrency,
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
                   ],
@@ -373,7 +386,7 @@ class _Button extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   text,
-                  style: const TextStyle(fontSize: 26),
+                   style: const TextStyle(fontSize: 30),
                 ),
               ),
             ),

@@ -6,7 +6,7 @@ class ExchangeRatesModel extends ChangeNotifier {
     loadValue();
   }
 
-  final UserCurrencyService _userCurrencyService;//экземпляр класса сервиса
+  final UserCurrencyService _userCurrencyService; //экземпляр класса сервиса
 
   void loadValue() async {
     await _userCurrencyService.loadCurrencies();
@@ -91,8 +91,8 @@ class ExchangeRatesModel extends ChangeNotifier {
       _firstFiledValue = calculateValue(
           _secondRotes, _firstRotes, double.parse(_secondFiledValue));
     }
-    notifyListeners();
-  } //функция модсчета курса
+    // notifyListeners();
+  } //функция подсчета курса
 
   String calculateValue(double rateOne, double rateTwo, double value) {
     var result = ((rateOne / rateTwo) * value).toStringAsFixed(2).toString();
@@ -122,7 +122,7 @@ class ExchangeRatesModel extends ChangeNotifier {
     String text = _deterningActiveField();
     if (enterNumber == '0' && text == '0') {
       return;
-    } else if (text.length == 1 && text[0] == '0') {
+    } else if (text.length == 1 && text[0] == '0'&& text != '.') {
       text = '';
     }
     if (text.length < 10) {
@@ -133,12 +133,15 @@ class ExchangeRatesModel extends ChangeNotifier {
     notifyListeners();
   } //функция ввода цифр
 
+
+
   void delete() {
     String text = _deterningActiveField();
     text = text.substring(0, text.length - 1);
     if (text == '') {
       text = '0';
     }
+
     _returnValueInField(text);
     currenciesDividing();
     notifyListeners();

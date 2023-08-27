@@ -112,7 +112,7 @@ class CurrencyList extends StatelessWidget {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       currency.name,
-                                      style: const TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
                                 ),
