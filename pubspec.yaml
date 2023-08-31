@@ -30,6 +30,7 @@ environment:
 dependencies:
   provider: ^6.0.5
   json_annotation: ^4.8.1
+  intl: ^0.18.1
   flutter:
     sdk: flutter
 
@@ -63,8 +64,7 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-   - images/vector_vertical.png
+  # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

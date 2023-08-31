@@ -11,6 +11,5 @@ class ColorsTheme extends ChangeNotifier {
   Color colorOfSecondButtonColor = const Color(0xFF4B5C87);
   Color colorOfSecondWidgetColor = const Color(0xFFFFFFFF);
   Color lightBlue = const Color(0xFF213F8F);
-  AssetImage vectorVertical = const AssetImage('images/vector_vertical.png');
 }
 ///НУЖЕН РЕФАКТОР НАЗВАНИЙ

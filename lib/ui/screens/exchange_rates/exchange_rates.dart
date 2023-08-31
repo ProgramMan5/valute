@@ -22,9 +22,9 @@ class ExchangeRates extends StatelessWidget {
                 onPressed: () {},
                 icon: Icon(
                   color: color.colorOfIconsAppBar,
-                  Icons.navigate_before,
+                  Icons.settings_sharp,
                 ),
-                iconSize: 30,
+                iconSize: 28,
               ),
               const Text(
                 'Конвертер валют',
@@ -68,18 +68,55 @@ class ExchangeRatesBody extends StatelessWidget {
                 charCodeCurrency: model.firstCharCodeCurrency,
                 valueField: model.firstFiledValue,
                 nameCurrency: model.firstNameCurrency,
+                percentChange: model.percentChangeSecondValue,
                 widgetFilling: () {
                   model.firstWidgetFilling();
                 }),
             const SizedBox(
-              height: 24,
+              height: 4,
             ),
-            Image(
-              image: color.vectorVertical,
-              fit: BoxFit.fill,
+            SizedBox(
+              width: 80.0,
+              height: 80.0,
+              child: FloatingActionButton(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                onPressed: () {},
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Stack(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Transform.rotate(
+                            angle: 1.5708,
+                            child: const Icon(
+                              Icons.trending_flat,
+                              size: 44,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Transform.rotate(
+                            angle: 4.7124,
+                            child: const Icon(
+                              Icons.trending_flat,
+                              size: 44,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
             const SizedBox(
-              height: 24,
+              height: 4,
             ),
             _RotesContainer(
                 choiceInputField: model.makeSecondFieldActive,
@@ -88,11 +125,19 @@ class ExchangeRatesBody extends StatelessWidget {
                 charCodeCurrency: model.secondCharCodeCurrency,
                 valueField: model.secondFiledValue,
                 nameCurrency: model.secondNameCurrency,
+                percentChange: model.percentChangeFirstValue,
                 widgetFilling: () {
                   model.secondWidgetFilling();
                 }),
             const SizedBox(
-              height: 80,
+              height: 30,
+            ),
+            Text(
+              'Данные актуальны на ${model.timeData} по МСК',
+              style: TextStyle(color: color.colorOfText),
+            ),
+            const SizedBox(
+              height: 60,
             ),
             Expanded(
               child: Row(
@@ -184,7 +229,7 @@ class ExchangeRatesBody extends StatelessWidget {
                         ),
                         _Button(
                           onPressed: () {
-                            model.numPress('.');
+                            model.commaPressed();
                           },
                           text: '.',
                         ),
@@ -207,7 +252,6 @@ class ExchangeRatesBody extends StatelessWidget {
                           },
                           text: 'С',
                         ),
-                        // '⌫',
                       ],
                     ),
                   ),
@@ -227,6 +271,7 @@ class _RotesContainer extends StatelessWidget {
   final String charCodeCurrency;
   final String valueField;
   final String nameCurrency;
+  final String percentChange;
   final Function() widgetFilling;
   final Function() choiceInputField;
 
@@ -238,108 +283,126 @@ class _RotesContainer extends StatelessWidget {
       required this.valueField,
       required this.nameCurrency,
       required this.widgetFilling,
-      required this.choiceInputField})
+      required this.choiceInputField,
+      required this.percentChange})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final color = Provider.of<ColorsTheme>(context);
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
-        child: Container(
-          height: 90,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: const Alignment(0, 0),
-              end: const Alignment(3.4, 3),
-              colors: <Color>[
-                color.colorOfRatesWidget,
-                color.lightBlue,
-              ],
-            ),
-            borderRadius: BorderRadius.circular(12),
+      padding: const EdgeInsets.symmetric(horizontal: 2),
+      child: Container(
+        height: 90,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: const Alignment(0, 0),
+            end: const Alignment(3.4, 3),
+            colors: <Color>[
+              color.colorOfRatesWidget,
+              color.lightBlue,
+            ],
           ),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    charCodeCurrency,
-                    style: const TextStyle(fontSize: 38),
-                  ),
-                ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
               ),
-              Expanded(
-                flex: 2,
-                child: Column(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CurrencyList(),
+                  ),
+                );
+                widgetFilling();
+              },
+              child: Center(
+                child: Row(
                   children: [
-                    const SizedBox(
-                      height: 6,
+                    const Icon(
+                      Icons.keyboard_arrow_left,
+                      color: Colors.black,
                     ),
-                    Container(
-                      height: 38,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: 1.4),
-                      ),
-                      child: TextButton(
-                        onPressed: choiceInputField,
-                        child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              valueField,
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: color.colorOfTextBlack, fontSize: 20),
-                            )),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        nameCurrency,
-                        style: const TextStyle(fontSize: 16),
+                    Text(
+                      charCodeCurrency,
+                      style: TextStyle(
+                        fontSize: 28,
+                        color: color.colorOfTextBlack,
                       ),
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CurrencyList(),
-                        ),
-                      );
-                      widgetFilling();
-                    },
-                    splashRadius: 30,
-                    //не ставить 0
-                    icon: Icon(
-                      color: colorOfIconWidget,
-                      Icons.sync,
-                    ),
-                    iconSize: 38,
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 6,
                   ),
-                ),
+                  Row(
+                    children: [
+                      Container(
+                        height: 38,
+                        width: 160,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(width: 1.4),
+                        ),
+                        child: TextButton(
+                          onPressed: choiceInputField,
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              valueField,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                color: color.colorOfTextBlack,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        '$percentChange%',
+                        style: const TextStyle(
+                          color: Color(0xFF3059C5),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      nameCurrency,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -386,7 +449,7 @@ class _Button extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   text,
-                   style: const TextStyle(fontSize: 30),
+                  style: const TextStyle(fontSize: 30),
                 ),
               ),
             ),
